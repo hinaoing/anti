@@ -1,0 +1,15 @@
+const getDropdownOptions = (currentIndex: number) => {
+  return PRIORITY_CODE.filter((option) => {
+    // 1. 总是允许选择 "0" (空白/重置选项)
+    if (option.code === "0") return true;
+
+    // 2. 检查该选项是否已被“其他”下拉框占用
+    // 使用 .some() 只要找到一个匹配的就立即返回 true，效率更高
+    const isTaken = prioritySettings.some((setting, index) => 
+      index !== currentIndex && setting.tcode === option.code
+    );
+
+    // 3. 如果没被占用 (!isTaken)，则保留该选项
+    return !isTaken;
+  });
+};
