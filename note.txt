@@ -13,3 +13,33 @@ const getDropdownOptions = (currentIndex: number) => {
     return !isTaken;
   });
 };
+
+
+setPrioritySettings(prev => 
+  prev.map((item, i) => i === index ? { ...item, tcode: value } : item)
+);
+
+setPrioritySettings(prev => 
+  prev.with(index, { ...prev[index], tcode: value })
+);
+
+
+const requestPayload = [
+  // 1. 先把非 "0" 的有效 tcode 拿出来
+  ...prioritySettings.map(s => s.tcode).filter(v => v !== "0"),
+  
+  // 2. 无论够不够，直接追加 4 个 "0" (作为后备填充)
+  ...Array(4).fill("0") 
+]
+  // 3. 截取前 4 个 (不够的会被上面的 "0" 补位，够的就把多余的 "0" 切掉)
+  .slice(0, 4) 
+  
+  // 4. 最后统一生成对象
+  .map((tcode, index) => ({
+    priority: index + 1,
+    tcode: tcode
+  }));
+
+setPrioritySettings(requestPayload);
+
+
