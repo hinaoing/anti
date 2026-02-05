@@ -1,10 +1,6 @@
 [
   {
-    "name": "New York",
-    "code": "NY"
-  },
-  {
-    "name": "Paris",
-    "code": "PRS"
+    "name": "London",
+    "code": "LDN"
   }
 ]

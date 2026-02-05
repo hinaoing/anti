@@ -100,15 +100,18 @@ export default function SelectionPage() {
         setSelections(newSelections);
     };
 
-    const getOptions = (currentIndex: number) => {
-        const otherSelectedCodes = selections
-            .filter((item, index) => index !== currentIndex && item && item.code !== "0")
-            .map((item) => item.code);
+    // Calculate available options for each dropdown
+    const availableOptions = React.useMemo(() => {
+        return selections.map((_, currentIndex) => {
+            const otherSelectedCodes = selections
+                .filter((item, index) => index !== currentIndex && item && item.code !== "0")
+                .map((item) => item.code);
 
-        return cities.filter(
-            (city) => city.code === "0" || !otherSelectedCodes.includes(city.code)
-        );
-    };
+            return cities.filter(
+                (city) => city.code === "0" || !otherSelectedCodes.includes(city.code)
+            );
+        });
+    }, [selections]); // Only recalculate when selections change
 
     return (
         <div className="flex flex-col items-center justify-center min-h-screen gap-8 p-8">
@@ -120,7 +123,7 @@ export default function SelectionPage() {
                         key={index}
                         value={selection}
                         onChange={(e) => handleChange(index, e.value)}
-                        options={getOptions(index)}
+                        options={availableOptions[index]}
                         optionLabel="name"
                         placeholder={`Select Application ${index + 1}`}
                         className="w-full"
@@ -134,7 +137,6 @@ export default function SelectionPage() {
                     icon="pi pi-cog"
                     //   className="p-button-secondary"
                     onClick={saveSettings}
-                    disabled={!hasChanges}
                 />
                 <Button
                     label="重置"
